@@ -1,0 +1,118 @@
+{
+  "project_info": {
+    "project_number": "41711140833",
+    "project_id": "assignment2-18514",
+    "storage_bucket": "assignment2-18514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41711140833:android:cd591360bb3ce866b79ca0",
+        "android_client_info": {
+          "package_name": "au.utas.edu.blpoke.assignment4.kit305_assignment_4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRpOhAUzq9Z1h3xuoYE2EtWMeH6L5N3l4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41711140833-5t67qckal0eagie11r82m3uq4g9be5ke.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "au.edu.utas.KIT305Assignment3"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41711140833:android:0aee7efef564f32bb79ca0",
+        "android_client_info": {
+          "package_name": "com.example.flutter_tutorial_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRpOhAUzq9Z1h3xuoYE2EtWMeH6L5N3l4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41711140833-5t67qckal0eagie11r82m3uq4g9be5ke.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "au.edu.utas.KIT305Assignment3"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:41711140833:android:a8b661789987cd20b79ca0",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRpOhAUzq9Z1h3xuoYE2EtWMeH6L5N3l4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "41711140833-i73731mm0l3thqosd9pb07gkntil7op1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "41711140833-5t67qckal0eagie11r82m3uq4g9be5ke.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "au.edu.utas.KIT305Assignment3"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
