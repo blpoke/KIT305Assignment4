@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 class Sleep
 {
   Timestamp dateTime;
-  bool dirty;
+  int duration;
   String note;
 
-  Sleep({ required this.dateTime, required this.dirty, required this.note});
+  Sleep({ required this.dateTime, required this.duration, required this.note});
 
   Sleep.fromJson(Map<String, dynamic> json)
       :
         dateTime = json['dateTime'],
-        dirty = json['dirty'],
+        duration = json['duration'],
         note = json['note'];
 
   Map<String, dynamic> toJson() =>
       {
         'dateTime': dateTime,
-        'dirty': dirty,
+        'duration': duration,
         'note' : note
       };
 }
@@ -27,7 +27,7 @@ class SleepModel extends ChangeNotifier {
   /// Internal, private state of the list.
   final List<Sleep> items = [];
 
-  CollectionReference sleepCollection = FirebaseFirestore.instance.collection('nappies');
+  CollectionReference sleepCollection = FirebaseFirestore.instance.collection('sleeps');
   bool loading = false;
 
   //Normally a model would get from a database here, we are just hardcoding some data for this week
@@ -57,7 +57,7 @@ class SleepModel extends ChangeNotifier {
     notifyListeners(); //tell children to redraw, and they will see that the loading indicator is on
 
     //get all nappies
-    var querySnapshot = await sleepCollection.orderBy("dateTime").get();
+    var querySnapshot = await sleepCollection.orderBy("dateTime", descending: true).get();
 
     //iterate over the movies and add them to the list
     for (var doc in querySnapshot.docs) {

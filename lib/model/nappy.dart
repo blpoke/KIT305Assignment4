@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 
 class Nappy
 {
+  late String id;
   Timestamp dateTime;
   bool dirty;
   String note;
 
   Nappy({ required this.dateTime, required this.dirty, required this.note});
 
-  Nappy.fromJson(Map<String, dynamic> json)
+  Nappy.fromJson(Map<String, dynamic> json, this.id)
       :
         dateTime = json['dateTime'],
         dirty = json['dirty'],
@@ -36,9 +37,39 @@ class NappyModel extends ChangeNotifier {
     fetch();
   }
 
-  void add(Nappy item) {
-    items.add(item);
+  Nappy? get(String? id)
+  {
+    if (id == null) return null;
+    return items.firstWhere((nappy) => nappy.id == id);
+  }
+
+  Future add(Nappy item) async {
+    loading = true;
     update();
+    
+    await nappiesCollection.add(item.toJson());
+
+    await fetch();
+  }
+
+  Future updateItem(String id, Nappy item) async
+  {
+    loading = true;
+    update();
+
+    await nappiesCollection.doc(id).set(item.toJson());
+
+    await fetch();
+  }
+
+  Future delete(String id) async
+  {
+    loading = true;
+    update();
+
+    await nappiesCollection.doc(id).delete();
+
+    await fetch();
   }
 
   void removeAll() {
@@ -57,12 +88,12 @@ class NappyModel extends ChangeNotifier {
     notifyListeners(); //tell children to redraw, and they will see that the loading indicator is on
 
     //get all nappies
-    var querySnapshot = await nappiesCollection.orderBy("dateTime").get();
+    var querySnapshot = await nappiesCollection.orderBy("dateTime", descending: true).get();
 
     //iterate over the movies and add them to the list
     for (var doc in querySnapshot.docs) {
       //note not using the add(Movie item) function, because we don't want to add them to the db
-      var nappy = Nappy.fromJson(doc.data()! as Map<String, dynamic>);
+      var nappy = Nappy.fromJson(doc.data()! as Map<String, dynamic>, doc.id);
       items.add(nappy);
     }
 

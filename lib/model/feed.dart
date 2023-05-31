@@ -1,33 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+enum FeedingOption {
+  left,
+  right,
+  bottle
+}
+
 class Feed
 {
   Timestamp dateTime;
-  bool dirty;
+  int duration;
+  FeedingOption feedOpt;
   String note;
 
-  Feed({ required this.dateTime, required this.dirty, required this.note});
+  Feed({ required this.dateTime, required this.duration, required this.feedOpt, required this.note});
 
   Feed.fromJson(Map<String, dynamic> json)
       :
         dateTime = json['dateTime'],
-        dirty = json['dirty'],
+        duration = json['duration'],
+        feedOpt = parseFeedingOption(json['feedOpt']),
         note = json['note'];
 
   Map<String, dynamic> toJson() =>
       {
         'dateTime': dateTime,
-        'dirty': dirty,
+        'duration': duration,
+        'feedOpt': feedOpt.toString().split('.').last,
         'note' : note
       };
+}
+
+FeedingOption parseFeedingOption(String option) {
+  switch (option) {
+    case 'left':
+      return FeedingOption.left;
+    case 'right':
+      return FeedingOption.right;
+    case 'bottle':
+      return FeedingOption.bottle;
+    default:
+      throw ArgumentError('Invalid FeedingOption: $option');
+  }
 }
 
 class FeedModel extends ChangeNotifier {
   /// Internal, private state of the list.
   final List<Feed> items = [];
 
-  CollectionReference feedsCollection = FirebaseFirestore.instance.collection('nappies');
+  CollectionReference feedsCollection = FirebaseFirestore.instance.collection('feeds');
   bool loading = false;
 
   //Normally a model would get from a database here, we are just hardcoding some data for this week
@@ -57,7 +79,7 @@ class FeedModel extends ChangeNotifier {
     notifyListeners(); //tell children to redraw, and they will see that the loading indicator is on
 
     //get all nappies
-    var querySnapshot = await feedsCollection.orderBy("dateTime").get();
+    var querySnapshot = await feedsCollection.orderBy("dateTime", descending: true).get();
 
     //iterate over the movies and add them to the list
     for (var doc in querySnapshot.docs) {

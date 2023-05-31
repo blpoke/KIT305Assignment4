@@ -1,11 +1,11 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:kit305_assignment_4/model/nappy.dart';
 import 'package:kit305_assignment_4/model/feed.dart';
 import 'package:kit305_assignment_4/model/sleep.dart';
+import 'package:kit305_assignment_4/view/tables/feedsTableView.dart';
 import 'package:kit305_assignment_4/view/tables/nappiesTableView.dart';
+import 'package:kit305_assignment_4/view/tables/sleepsTableView.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -17,10 +17,12 @@ Future main() async {
   );
   print("\n\nConnected to Firebase App ${app.options.projectId}\n\n");
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -46,9 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   final tabs = [
-    NappiesListView(),
-    Center(child: Text("Feeds")),
-    Center(child: Text("Sleeps")),
+    const NappiesListView(),
+    const FeedsListView(),
+    const SleepsListView(),
     Center(child: Text("Summary")),
   ];
 
@@ -59,6 +61,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("Baby Tracker App"),
       ),
       body: tabs[_currentIndex],
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+
+        },
+
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         items: const [
