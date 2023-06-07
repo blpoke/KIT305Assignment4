@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:kit305_assignment_4/model/nappy.dart';
 
 import '../../util/util.dart';
+import '../new/newNappy.dart';
 
 class NappiesListView extends StatelessWidget {
   const NappiesListView({Key? key}) : super(key: key);
@@ -18,8 +19,7 @@ class NappiesListView extends StatelessWidget {
           child:CircularProgressIndicator()
       );
     }
-    else
-    {
+    else {
       return ListView.builder(
         itemBuilder: (_, index) {
           var nappy = nappyModel.items[index];
@@ -28,14 +28,14 @@ class NappiesListView extends StatelessWidget {
             subtitle: Text(nappy.dirty ? 'Dirty' : 'Wet'),
 
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) { return NappyDetails(id: nappy.id); }));
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return NappyDetails(id: nappy.id);
+              }));
             },
           );
         },
         itemCount: nappyModel.items.length,
       );
     }
-
-
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kit305_assignment_4/model/feed.dart';
 import 'package:kit305_assignment_4/util/util.dart';
+import 'package:kit305_assignment_4/view/details/feedDetailsView.dart';
 import 'package:provider/provider.dart';
 
 class FeedsListView extends StatelessWidget {
@@ -24,7 +25,12 @@ class FeedsListView extends StatelessWidget {
           return ListTile(
             title: Text(formatTimestamp(feed.dateTime)),
             subtitle: Text(capitalizeEnumString(feed.feedOpt.toString().split('.').last)),
-          );
+
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return FeedDetails(id: feed.id);
+              }));
+            });
         },
         itemCount: feedModel.items.length,
       );

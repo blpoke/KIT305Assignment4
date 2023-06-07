@@ -1,20 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kit305_assignment_4/model/nappy.dart';
-import 'package:kit305_assignment_4/util/util.dart';
 import 'package:provider/provider.dart';
 
-class NappyDetails extends StatefulWidget {
-  const NappyDetails({Key? key, this.id}) : super(key: key);
+import '../../model/nappy.dart';
+import '../../util/util.dart';
 
-  final String? id;
+class NewNappy extends StatefulWidget {
+  const NewNappy({Key? key}) : super(key: key);
 
   @override
-  State<NappyDetails> createState() => _NappyDetailsState();
+  State<NewNappy> createState() => _NewNappyState();
 }
 
-class _NappyDetailsState extends State<NappyDetails> {
+class _NewNappyState extends State<NewNappy> {
 
   final _formKey = GlobalKey<FormState>();
   final noteController = TextEditingController();
@@ -22,15 +21,10 @@ class _NappyDetailsState extends State<NappyDetails> {
   int? groupValue = 0;
 
   @override
-   Widget build(BuildContext context)
-  {
-    var nappy = Provider.of<NappyModel>(context, listen:false).get(widget.id);
-
-    noteController.text = nappy!.note;
-
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Edit Nappy"),
+          title: const Text("Add Nappy"),
         ),
         body: Padding(
             padding: const EdgeInsets.all(8),
@@ -95,19 +89,22 @@ class _NappyDetailsState extends State<NappyDetails> {
                               child: ElevatedButton.icon(onPressed: () async {
                                 if (_formKey.currentState?.validate() ?? false)
                                 {
-                                  nappy.dateTime = Timestamp.fromMillisecondsSinceEpoch(_selectedDateTime.millisecondsSinceEpoch);
+                                  Timestamp dateTime = Timestamp.fromMillisecondsSinceEpoch(_selectedDateTime.millisecondsSinceEpoch);
 
+                                  bool dirty;
                                   if (groupValue == 1)
                                   {
-                                    nappy.dirty = true;
+                                    dirty = true;
                                   }
                                   else {
-                                    nappy.dirty = false;
+                                    dirty = false;
                                   }
 
-                                  nappy.note = noteController.text;
+                                  String note = noteController.text;
 
-                                  await Provider.of<NappyModel>(context, listen:false).updateItem(widget.id!, nappy);
+                                  Nappy nappy = Nappy(dateTime: dateTime, dirty: dirty, note: note);
+
+                                  await Provider.of<NappyModel>(context, listen:false).add(nappy);
                                   //return to previous screen
                                   Navigator.pop(context);
                                 }

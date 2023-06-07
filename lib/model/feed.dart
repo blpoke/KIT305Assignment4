@@ -9,6 +9,7 @@ enum FeedingOption {
 
 class Feed
 {
+  late String id;
   Timestamp dateTime;
   int duration;
   FeedingOption feedOpt;
@@ -16,7 +17,7 @@ class Feed
 
   Feed({ required this.dateTime, required this.duration, required this.feedOpt, required this.note});
 
-  Feed.fromJson(Map<String, dynamic> json)
+  Feed.fromJson(Map<String, dynamic> json, this.id)
       :
         dateTime = json['dateTime'],
         duration = json['duration'],
@@ -58,9 +59,31 @@ class FeedModel extends ChangeNotifier {
     fetch();
   }
 
-  void add(Feed item) {
-    items.add(item);
+  Feed? get(String? id)
+  {
+    if (id == null) return null;
+    return items.firstWhere((feed) => feed.id == id);
+  }
+
+  Future add(Feed item) async {
+    loading = true;
     update();
+
+    await feedsCollection.add(item.toJson());
+
+    //refresh the db
+    await fetch();
+  }
+
+  Future updateItem(String id, Feed item) async {
+    loading = true;
+    update();
+
+    print(item);
+
+    await feedsCollection.doc(id).set(item.toJson());
+
+    await fetch();
   }
 
   void removeAll() {
@@ -84,7 +107,7 @@ class FeedModel extends ChangeNotifier {
     //iterate over the movies and add them to the list
     for (var doc in querySnapshot.docs) {
       //note not using the add(Movie item) function, because we don't want to add them to the db
-      var feed = Feed.fromJson(doc.data()! as Map<String, dynamic>);
+      var feed = Feed.fromJson(doc.data()! as Map<String, dynamic>, doc.id);
       items.add(feed);
     }
 

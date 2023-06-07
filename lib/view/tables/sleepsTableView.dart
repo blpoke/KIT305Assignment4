@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kit305_assignment_4/model/feed.dart';
 import 'package:kit305_assignment_4/model/sleep.dart';
 import 'package:kit305_assignment_4/util/util.dart';
+import 'package:kit305_assignment_4/view/details/sleepDetailsView.dart';
 import 'package:provider/provider.dart';
 
 class SleepsListView extends StatelessWidget {
@@ -25,6 +26,11 @@ class SleepsListView extends StatelessWidget {
           return ListTile(
             title: Text(formatTimestamp(sleep.dateTime)),
             subtitle: Text("${sleep.duration} Mins"),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return SleepDetails(id: sleep.id);
+              }));
+            },
           );
         },
         itemCount: sleepModel.items.length,

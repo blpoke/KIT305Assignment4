@@ -10,9 +10,17 @@ String formatTimestamp(Timestamp t)
   return formattedDate;
 }
 
-String FormatDate(DateTime d)
+String FormatDateTime(DateTime d)
 {
   DateFormat formatter = DateFormat('MMMM d, y - HH:mm'); // Choose your desired date format
+  String formattedDate = formatter.format(d);
+
+  return formattedDate;
+}
+
+String FormatDate(DateTime d)
+{
+  DateFormat formatter = DateFormat('MMMM d, y'); // Choose your desired date format
   String formattedDate = formatter.format(d);
 
   return formattedDate;
@@ -21,4 +29,11 @@ String FormatDate(DateTime d)
 String capitalizeEnumString(String input) {
   if (input.isEmpty) return input;
   return input[0].toUpperCase() + input.substring(1);
+}
+
+Timestamp toTimestamp(DateTime d) {
+  return Timestamp.fromMillisecondsSinceEpoch(d.millisecondsSinceEpoch);
+}
+int timeStampToInt(Timestamp t){
+  return t.millisecondsSinceEpoch;
 }
