@@ -60,53 +60,78 @@ class _MyHomePageState extends State<MyHomePage> {
     const Summary(),
   ];
 
+  Widget buildFloatingActionButton() {
+    if (_currentIndex != 3) {
+      return FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              if(_currentIndex == 0) {
+                return const NewNappy();
+              }
+              else if( _currentIndex == 1) {
+                return const NewFeed();
+              }
+              else if(_currentIndex == 2) {
+                return const NewSleep();
+              } else {
+                // Handle the default case when _currentIndex doesn't match any condition
+                return Container(); // or any other widget you want to return, or null
+              }
+            },
+          );
+        },
+        child: const Icon(Icons.add),
+      );
+    } else {
+      return Container(); // Return an empty container if _currentIndex is 3
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Baby Tracker App"),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          showDialog(context: context, builder: (context) {
-            switch (_currentIndex) {
-              case 0:
-                return const NewNappy();
-              case 1:
-                  return const NewFeed();
-              case 2:
-                return const NewSleep();
-              default:
-                return const Summary();
-            }
-          });
-        },
-      ),
+      floatingActionButton: buildFloatingActionButton(),
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.border_inner),
+            icon: Image.asset(
+              'poo.png',
+              width: 24,  // adjust the width to your desired size
+              height: 24,
+              color: Colors.white),
             label: "Nappies",
             backgroundColor: Colors.red,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.border_inner),
+            icon: Image.asset(
+              'feed.png',
+              width: 24,  // adjust the width to your desired size
+              height: 24,
+              color: Colors.white,),
             label: "Feeds",
             backgroundColor: Colors.green,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.border_inner),
+            icon: Image.asset(
+              'sleep.png',
+              width: 24,  // adjust the width to your desired size
+              height: 24,
+              color: Colors.white),
             label: "Sleeps",
             backgroundColor: Colors.purple,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.border_inner),
-            label: "Summary",
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.summarize),
+            label: "Nappies",
             backgroundColor: Colors.blue,
-          )
+          ),
         ],
         onTap: (index) {
           setState(() {

@@ -40,7 +40,7 @@ class _NewSleepState extends State<NewSleep> {
                       children: <Widget>[
                         ListTile(
                           title: const Text('Date and Time'),
-                          subtitle: Text(FormatDateTime(_selectedDateTime)),
+                          subtitle: Text(formatDateTime(_selectedDateTime)),
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () async {
                             final DateTime? date = await showDatePicker(

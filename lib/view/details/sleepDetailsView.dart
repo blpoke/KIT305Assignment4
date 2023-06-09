@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kit305_assignment_4/model/sleep.dart';
@@ -25,6 +24,11 @@ class _SleepDetailsState extends State<SleepDetails> {
   @override
   Widget build(BuildContext context) {
     var sleep = Provider.of<SleepModel>(context, listen:false).get(widget.id);
+    Sleep? temp = sleep;
+    
+    _selectedDateTime = temp!.dateTime.toDate();
+    noteController.text = temp.note;
+    durationController.text = temp.duration.toString();
 
     return Scaffold(
         appBar: AppBar(
@@ -43,7 +47,7 @@ class _SleepDetailsState extends State<SleepDetails> {
                       children: <Widget>[
                         ListTile(
                           title: const Text('Date and Time'),
-                          subtitle: Text(FormatDateTime(_selectedDateTime)),
+                          subtitle: Text(formatDateTime(_selectedDateTime)),
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () async {
                             final DateTime? date = await showDatePicker(
@@ -67,6 +71,9 @@ class _SleepDetailsState extends State<SleepDetails> {
                                     time.hour,
                                     time.minute,
                                   );
+                                  temp.dateTime = toTimestamp(_selectedDateTime);
+                                  temp.duration = int.parse(durationController.text);
+                                  temp.note = noteController.text;
                                 });
                               }
                             }
@@ -91,7 +98,7 @@ class _SleepDetailsState extends State<SleepDetails> {
                                 onPressed: () async {
                                   if (_formKey.currentState?.validate() ?? false) {
 
-                                    sleep!.dateTime = Timestamp.fromMillisecondsSinceEpoch(_selectedDateTime.millisecondsSinceEpoch);
+                                    sleep!.dateTime = toTimestamp(_selectedDateTime);
                                     sleep.duration = int.parse(durationController.text);
 
                                     sleep.note = noteController.text;

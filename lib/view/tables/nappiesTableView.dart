@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:kit305_assignment_4/model/nappy.dart';
 
 import '../../util/util.dart';
-import '../new/newNappy.dart';
 
 class NappiesListView extends StatelessWidget {
   const NappiesListView({Key? key}) : super(key: key);
@@ -23,14 +22,23 @@ class NappiesListView extends StatelessWidget {
       return ListView.builder(
         itemBuilder: (_, index) {
           var nappy = nappyModel.items[index];
-          return ListTile(
-            title: Text(formatTimestamp(nappy.dateTime)),
-            subtitle: Text(nappy.dirty ? 'Dirty' : 'Wet'),
+          return Dismissible(
+            key: ValueKey(nappy.id),
+            background: Container (
+                color: Colors.red
+            ),
+            child: ListTile(
+              title: Text(formatTimestamp(nappy.dateTime)),
+              subtitle: Text(nappy.dirty ? 'Dirty' : 'Wet'),
 
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return NappyDetails(id: nappy.id);
-              }));
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return NappyDetails(id: nappy.id);
+                }));
+              },
+            ),
+            onDismissed: (direction) {
+              nappyModel.delete(nappy.id);
             },
           );
         },

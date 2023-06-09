@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kit305_assignment_4/model/nappy.dart';
@@ -25,8 +24,10 @@ class _NappyDetailsState extends State<NappyDetails> {
    Widget build(BuildContext context)
   {
     var nappy = Provider.of<NappyModel>(context, listen:false).get(widget.id);
+    Nappy? temp = nappy;
 
-    noteController.text = nappy!.note;
+    _selectedDateTime = temp!.dateTime.toDate();
+    noteController.text = temp.note;
 
     return Scaffold(
         appBar: AppBar(
@@ -45,7 +46,7 @@ class _NappyDetailsState extends State<NappyDetails> {
                           children: <Widget>[
                             ListTile(
                               title: const Text('Date and Time'),
-                              subtitle: Text(FormatDateTime(_selectedDateTime)),
+                              subtitle: Text(formatDateTime(_selectedDateTime)),
                               trailing: const Icon(Icons.calendar_today),
                               onTap: () async {
                                 final DateTime? date = await showDatePicker(
@@ -69,7 +70,19 @@ class _NappyDetailsState extends State<NappyDetails> {
                                         time.hour,
                                         time.minute,
                                       );
-                                      print(FormatDateTime(_selectedDateTime));
+                                      temp.dateTime = toTimestamp(_selectedDateTime);
+
+                                      if(groupValue == 1)
+                                      {
+                                        temp.dirty =  true;
+                                      }
+                                      else
+                                      {
+                                        temp.dirty = false;
+                                      }
+
+                                      temp.note = noteController.text;
+
                                     });
                                   }
                                 }
@@ -95,16 +108,13 @@ class _NappyDetailsState extends State<NappyDetails> {
                               child: ElevatedButton.icon(onPressed: () async {
                                 if (_formKey.currentState?.validate() ?? false)
                                 {
-                                  nappy.dateTime = Timestamp.fromMillisecondsSinceEpoch(_selectedDateTime.millisecondsSinceEpoch);
-
-                                  if (groupValue == 1)
-                                  {
+                                  nappy!.dateTime = toTimestamp(_selectedDateTime);
+                                  if (groupValue == 1) {
                                     nappy.dirty = true;
                                   }
                                   else {
                                     nappy.dirty = false;
                                   }
-
                                   nappy.note = noteController.text;
 
                                   await Provider.of<NappyModel>(context, listen:false).updateItem(widget.id!, nappy);
@@ -117,9 +127,6 @@ class _NappyDetailsState extends State<NappyDetails> {
                         ),
                       )
                   )
-
-                  //we will add form fields etc here
-
                 ]
             )
         )

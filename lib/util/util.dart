@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
+import '../model/feed.dart';
+import '../model/nappy.dart';
+import '../model/sleep.dart';
+
 String formatTimestamp(Timestamp t)
 {
   DateTime dateTime = t.toDate();
@@ -10,7 +14,7 @@ String formatTimestamp(Timestamp t)
   return formattedDate;
 }
 
-String FormatDateTime(DateTime d)
+String formatDateTime(DateTime d)
 {
   DateFormat formatter = DateFormat('MMMM d, y - HH:mm'); // Choose your desired date format
   String formattedDate = formatter.format(d);
@@ -18,7 +22,7 @@ String FormatDateTime(DateTime d)
   return formattedDate;
 }
 
-String FormatDate(DateTime d)
+String formatDate(DateTime d)
 {
   DateFormat formatter = DateFormat('MMMM d, y'); // Choose your desired date format
   String formattedDate = formatter.format(d);
@@ -34,6 +38,73 @@ String capitalizeEnumString(String input) {
 Timestamp toTimestamp(DateTime d) {
   return Timestamp.fromMillisecondsSinceEpoch(d.millisecondsSinceEpoch);
 }
+
 int timeStampToInt(Timestamp t){
   return t.millisecondsSinceEpoch;
+}
+
+int countWet(List<Nappy> n) {
+  int count = 0;
+
+  for (var i in n) {
+    if (i.dirty != true) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+int countDirty(List<Nappy> n) {
+  int count = 0;
+
+  for (var i in n) {
+    if (i.dirty == true) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+int totalSleep(List<Sleep> s) {
+  int total = 0;
+
+  for (var i in s) {
+    total = total + i.duration;
+  }
+
+  return total;
+}
+
+int totalLeft(List<Feed> f) {
+  int total = 0;
+
+  for (var i in f) {
+    if(i.feedOpt == FeedingOption.left){
+      total = total + i.duration;
+    }
+  }
+  return total;
+}
+
+int totalRight(List<Feed> f) {
+  int total = 0;
+
+  for (var i in f) {
+    if(i.feedOpt == FeedingOption.right){
+      total = total + i.duration;
+    }
+  }
+  return total;
+}
+int totalBottle(List<Feed> f) {
+  int total = 0;
+
+  for (var i in f) {
+    if(i.feedOpt == FeedingOption.bottle){
+      total = total + i.duration;
+    }
+  }
+  return total;
 }

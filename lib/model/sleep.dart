@@ -48,6 +48,15 @@ class SleepModel extends ChangeNotifier {
     await fetch();
   }
 
+  Future delete(String id) async {
+    loading = true;
+    update();
+
+    await sleepCollection.doc(id).delete();
+
+    await fetch();
+  }
+
   Future updateItem(String id, Sleep item) async
   {
     loading = true;
@@ -104,11 +113,12 @@ class SleepModel extends ChangeNotifier {
 
   List<Sleep> filterByDate(DateTime selectedDate) {
     List<Sleep> filteredList = [];
-    Timestamp filterLowerBound = toTimestamp(selectedDate);
-    Timestamp filterUpperBound = toTimestamp(selectedDate.add(const Duration(days: 1)));
+
+    DateTime justDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    Timestamp filterLowerBound = toTimestamp(justDate);
+    Timestamp filterUpperBound = toTimestamp(justDate.add(const Duration(days: 1)));
 
     for (var sleep in items) {
-      print(timeStampToInt(sleep.dateTime));
       if(timeStampToInt(sleep.dateTime) >= timeStampToInt(filterLowerBound) && timeStampToInt(sleep.dateTime) <= timeStampToInt(filterUpperBound))
       {
         print("yay");

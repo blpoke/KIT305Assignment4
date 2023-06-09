@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kit305_assignment_4/model/nappy.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/feed.dart';
@@ -43,7 +42,7 @@ class _NewFeedState extends State<NewFeed> {
                       children: <Widget>[
                         ListTile(
                           title: const Text('Date and Time'),
-                          subtitle: Text(FormatDateTime(_selectedDateTime)),
+                          subtitle: Text(formatDateTime(_selectedDateTime)),
                           trailing: const Icon(Icons.calendar_today),
                           onTap: () async {
                             final DateTime? date = await showDatePicker(

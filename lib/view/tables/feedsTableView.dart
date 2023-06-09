@@ -22,15 +22,25 @@ class FeedsListView extends StatelessWidget {
       return ListView.builder(
         itemBuilder: (_, index) {
           var feed = feedModel.items[index];
-          return ListTile(
-            title: Text(formatTimestamp(feed.dateTime)),
-            subtitle: Text(capitalizeEnumString(feed.feedOpt.toString().split('.').last)),
+          return Dismissible(
+              key: ValueKey(feed.id),
+              background: Container(
+                  color: Colors.red
+              ),
+              child: ListTile(
+                  title: Text(formatTimestamp(feed.dateTime)),
+                  subtitle: Text(capitalizeEnumString(feed.feedOpt.toString().split('.').last)),
 
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return FeedDetails(id: feed.id);
-              }));
-            });
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return FeedDetails(id: feed.id);
+                    }));
+                  }
+              ),
+            onDismissed: (direction) {
+              feedModel.delete(feed.id);
+            } ,
+          ) ;
         },
         itemCount: feedModel.items.length,
       );

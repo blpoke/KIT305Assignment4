@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +27,13 @@ class _FeedDetailsState extends State<FeedDetails> {
 
     var feed = Provider.of<FeedModel>(context, listen:false).get(widget.id);
 
+    Feed? temp = feed;
+
+    _selectedDateTime = temp!.dateTime.toDate();
+    noteController.text = temp.note;
+    durationController.text = temp.duration.toString();
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edit Feed"),
@@ -45,7 +51,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                     children: <Widget>[
                       ListTile(
                         title: const Text('Date and Time'),
-                        subtitle: Text(FormatDateTime(_selectedDateTime)),
+                        subtitle: Text(formatDateTime(_selectedDateTime)),
                         trailing: const Icon(Icons.calendar_today),
                         onTap: () async {
                           final DateTime? date = await showDatePicker(
@@ -69,6 +75,17 @@ class _FeedDetailsState extends State<FeedDetails> {
                                   time.hour,
                                   time.minute,
                                 );
+                                temp.note = noteController.text;
+                                temp.dateTime = toTimestamp(_selectedDateTime);
+                                if (groupValue == 0) {
+                                  temp.feedOpt = FeedingOption.left;
+                                }
+                                else if (groupValue == 1) {
+                                  temp.feedOpt = FeedingOption.right;
+                                }
+                                else {
+                                  temp.feedOpt = FeedingOption.bottle;
+                                }
                               });
                             }
                           }
@@ -83,8 +100,6 @@ class _FeedDetailsState extends State<FeedDetails> {
                             2: Text(capitalizeEnumString(FeedingOption.bottle.toString().split('.').last))
                           },
                           onValueChanged: (groupValue) {
-                            print(groupValue);
-
                             setState(() => this.groupValue = groupValue as int?);
                           }
                       ),
@@ -93,7 +108,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                         controller: durationController,
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          FilteringTextInputFormatter.allow(RegExp(r'\d')),
                           FilteringTextInputFormatter.digitsOnly
                         ],
                       ),
@@ -107,7 +122,7 @@ class _FeedDetailsState extends State<FeedDetails> {
                               onPressed: () async {
                                 if (_formKey.currentState?.validate() ?? false) {
 
-                                  feed!.dateTime = Timestamp.fromMillisecondsSinceEpoch(_selectedDateTime.millisecondsSinceEpoch);
+                                  feed!.dateTime = toTimestamp(_selectedDateTime);
                                   if(groupValue == 0)
                                   {
                                     feed.feedOpt = FeedingOption.left;

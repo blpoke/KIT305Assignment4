@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../util/util.dart';
+
 enum FeedingOption {
   left,
   right,
@@ -75,11 +77,19 @@ class FeedModel extends ChangeNotifier {
     await fetch();
   }
 
-  Future updateItem(String id, Feed item) async {
+  Future delete(String id) async
+  {
     loading = true;
     update();
 
-    print(item);
+    await feedsCollection.doc(id).delete();
+
+    await fetch();
+  }
+
+  Future updateItem(String id, Feed item) async {
+    loading = true;
+    update();
 
     await feedsCollection.doc(id).set(item.toJson());
 
@@ -118,6 +128,23 @@ class FeedModel extends ChangeNotifier {
     //we're done, no longer loading
     loading = false;
     update();
+  }
+
+  List<Feed> filterByDate(DateTime selectedDate) {
+    List<Feed> filteredList = [];
+
+    DateTime justDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    Timestamp filterLowerBound = toTimestamp(justDate);
+    Timestamp filterUpperBound = toTimestamp(justDate.add(const Duration(days: 1)));
+
+    for (var feed in items) {
+      if(timeStampToInt(feed.dateTime) >= timeStampToInt(filterLowerBound) && timeStampToInt(feed.dateTime) <= timeStampToInt(filterUpperBound))
+      {
+        print("yay");
+        filteredList.add(feed);
+      }
+    }
+    return filteredList;
   }
 
   //update any listeners

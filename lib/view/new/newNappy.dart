@@ -39,7 +39,7 @@ class _NewNappyState extends State<NewNappy> {
                           children: <Widget>[
                             ListTile(
                               title: const Text('Date and Time'),
-                              subtitle: Text(FormatDateTime(_selectedDateTime)),
+                              subtitle: Text(formatDateTime(_selectedDateTime)),
                               trailing: const Icon(Icons.calendar_today),
                               onTap: () async {
                                 final DateTime? date = await showDatePicker(
@@ -63,7 +63,6 @@ class _NewNappyState extends State<NewNappy> {
                                         time.hour,
                                         time.minute,
                                       );
-                                      print(FormatDateTime(_selectedDateTime));
                                     });
                                   }
                                 }

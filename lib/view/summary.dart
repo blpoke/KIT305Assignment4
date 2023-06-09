@@ -24,6 +24,15 @@ class _SummaryState extends State<Summary> {
     final sleeps = Provider.of<SleepModel>(context);
 
     List<Sleep> selectedSleeps = sleeps.filterByDate(_selectedDate);
+    List<Nappy> selectedNappies = nappies.filterByDate(_selectedDate);
+    List<Feed> selectedFeeds = feeds.filterByDate(_selectedDate);
+
+    int wet = countWet(selectedNappies);
+    int dirty = countDirty(selectedNappies);
+    int totalSleepDuration = totalSleep(selectedSleeps);
+    int feedTimeLeft = totalLeft(selectedFeeds);
+    int feedTimeRight = totalRight(selectedFeeds);
+    int feedTimeBottle = totalBottle(selectedFeeds);
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -32,7 +41,7 @@ class _SummaryState extends State<Summary> {
         children: <Widget>[
           ListTile(
             title: const Text('Date and Time'),
-            subtitle: Text(FormatDate(_selectedDate)),
+            subtitle: Text(formatDate(_selectedDate)),
             trailing: const Icon(Icons.calendar_today),
             onTap: () async {
               final DateTime? date = await showDatePicker(
@@ -47,6 +56,32 @@ class _SummaryState extends State<Summary> {
                 });
               }
             },
+          ),
+          const Text("Total Nappies"),
+          ListTile(
+            title: const Text("Wet"),
+            subtitle: Text("$wet"),
+          ),
+          ListTile(
+            title: const Text("Dirty"),
+            subtitle: Text("$dirty"),
+          ),
+          const Text("Total Feed Time"),
+          ListTile(
+            title: const Text("Left"),
+            subtitle: Text("$feedTimeLeft Mins"),
+          ),
+          ListTile(
+            title: const Text("Right"),
+            subtitle: Text("$feedTimeRight Mins"),
+          ),
+          ListTile(
+            title: const Text("Bottle"),
+            subtitle: Text("$feedTimeBottle Mins"),
+          ),
+          const Text("Total Sleep Time"),
+          ListTile(
+            title: Text("$totalSleepDuration Mins"),
           ),
         ],
       ),

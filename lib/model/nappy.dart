@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../util/util.dart';
+
 class Nappy
 {
   late String id;
@@ -104,6 +106,23 @@ class NappyModel extends ChangeNotifier {
     //we're done, no longer loading
     loading = false;
     update();
+  }
+
+  List<Nappy> filterByDate(DateTime selectedDate) {
+    List<Nappy> filteredList = [];
+
+    DateTime justDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    Timestamp filterLowerBound = toTimestamp(justDate);
+    Timestamp filterUpperBound = toTimestamp(justDate.add(const Duration(days: 1)));
+
+    for (var nappy in items) {
+      if(timeStampToInt(nappy.dateTime) >= timeStampToInt(filterLowerBound) && timeStampToInt(nappy.dateTime) <= timeStampToInt(filterUpperBound))
+      {
+        print("yay");
+        filteredList.add(nappy);
+      }
+    }
+    return filteredList;
   }
 
   //update any listeners
